@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
+public class Pins {
     public static void main(String[] args) {
 
         // create a pins list
