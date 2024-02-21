@@ -1,8 +1,15 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class threeSum {
     public static void main(String[] args){
+
+        // test 3sum
+        int[] arr = new int[]{3, 2, -6, 4, 1};
+        threeSum(arr);
+        int[] arr1 = new int[]{1, 2, 3};
+        subsets(arr1);
 
     }
 
@@ -20,10 +27,44 @@ public class threeSum {
     // make sure to not add duplicates
     // 1. Do not find complements of a digit that has already been checked - nums[i] == nums[i + 1]
     public static List<List<Integer>> threeSum(int[] nums){
+        // sort the array
+        Arrays.sort(nums);
+        List<List<Integer>> res= new ArrayList<>();
+        int len = nums.length - 1;
+
+        // iterate through each value in nums
+        for(int i = 0; i < nums.length; i++){
+
+            // skip repeating characters
+            if(nums[i] < 0){
+                threeSumHelper(nums, nums[i], 0, len, res);
+            }
+        }
+
+        return res;
     }
 
-    private static void threeSumHelper(){
-
+    private static void threeSumHelper(int[] nums, int key, int start, int end, List<List<Integer>> res){
+        // check pointers overlap
+        while(start < end){
+            // calculate mid
+            int mid = (start+end) / 2;
+            // get value
+            int value = key + nums[start] + nums[end];
+            if(value == 0){
+                res.add(new ArrayList<>(Arrays.asList(key, nums[start], nums[end])));
+                System.out.println("[" + key + " " + nums[start] + " " + nums[end] + "]");
+                // move start pointer so that it is not checking same values
+                start++;
+                while(start < end && nums[start] != nums[start - 1]){
+                    start++;
+                }
+            } else if (value < 0){
+                start++;
+            } else {
+                end--;
+            }
+        }
     }
 
     // find all subsets of a list
@@ -56,6 +97,7 @@ public class threeSum {
     private static void subsetsHelper(int[] nums, List<List<Integer>> result, List<Integer> subset, int index){
         if(index >= nums.length){
             result.add(new ArrayList<>(subset));
+            System.out.println(subset.toString());
             return;
         }
 
