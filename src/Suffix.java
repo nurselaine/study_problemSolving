@@ -1,3 +1,4 @@
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -7,7 +8,7 @@ public class Suffix {
 
     public static void main(String[] args){
         String[] strs = new String[]{"hello", "ello", "lo", "marshmello", "cello", "lemon", "blue", "red"};
-        String[] suffixArr = finsSuffix(strs);
+        String[] suffixArr = findSuffix2(strs);
         for(String s : suffixArr){
             System.out.print(s + " ");
         }
@@ -32,7 +33,7 @@ public class Suffix {
      *   - otherwirse move on
      * repeat this step until reaching the last string in strs array and return the resulint array
      * */
-    public static String[] finsSuffix(String[] strs){
+    public static String[] findSuffix(String[] strs){
         Arrays.sort(strs, Comparator.comparingInt(String::length));
         List<String> result = new ArrayList<>();
 
@@ -54,6 +55,20 @@ public class Suffix {
 
         return result.toArray(new String[result.size()]);
     }
+
+    public static String[] findSuffix2(String[] strs){
+        List<String> result = new ArrayList<>();
+
+        for(int i = 0; i < strs.length; i++){
+            for(int j = 0; j < strs.length; j++){
+                if(i != j && strs[i].length() <= strs[j].length() && strs[j].endsWith(strs[i])){
+                    result.add(strs[j]);
+                }
+            }
+        }
+        return result.toArray(new String[result.size()]);
+    }
+
 }
 
 
