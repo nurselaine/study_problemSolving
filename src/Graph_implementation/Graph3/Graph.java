@@ -73,45 +73,34 @@ public class Graph<T> {
 
     // dfs
     // take arbitrary starting node
-    // create a visited list and unvisited stack
-    // add starting node to unvisited stack
+    // create a visited list
+    // iterate over all nodes in graph
     // call dfs helper
-    // create string from visited list and return
     //
     // dfs helper
-    // vertex has been visited or vertex does not have neighbors then return
-    // add vertex to visited list
-    // get vertex neighbors
-    // iterate over neighbors
-    // if not found in visited list then add to unvisited stack
-    // pop off top vertex from unvisited stack and call dfs helper with popped vertex
+    // add curr vertex to visited list
+    // get vertex neighbors + iterate over neighbors
+    // if not found in visited list then call dfsHelper with neighbor node
     public String DFS(T root){
-        Vertex start = this.getVertex(root);
-        if(start == null) throw new InvalidParameterException("Vertex does not exist in graph");
-        List<Vertex> visited = new ArrayList<>();
-        Stack<Vertex> unvisited = new Stack<>();
+        Set<Vertex> visited = new HashSet<>();
         StringBuilder sb = new StringBuilder("DFS:");
-        unvisited.add(start);
-        DFSHelper(start, visited, unvisited);
-
-        for(Vertex v : visited){
-            sb.append(" " + v.data());
+        for(Vertex v : this.vertices){
+            if(!visited.contains(v)){
+                DFS(v, visited, sb);
+            }
         }
         return sb.toString();
     }
 
-    private void DFSHelper(Vertex root, List<Vertex> visited, Stack<Vertex> unvisited){
-        if(visited.contains(root) || unvisited.empty()){
-            return;
-        }
-        List<Vertex> neighbors = this.getNeighbors(root);
+    private void DFS(Vertex root, Set<Vertex> visited, StringBuilder sb){
         visited.add(root);
-        for(Vertex v : neighbors){
-            if(!visited.contains(v) && !unvisited.contains(v)){
-                unvisited.add(v);
+        sb.append(" " + root.data());
+
+        for(Vertex neighbor : this.getNeighbors(root)){
+            if(!visited.contains(neighbor)){
+                DFS(neighbor, visited, sb);
             }
         }
-        DFSHelper(unvisited.pop(), visited, unvisited);
     }
 
     // bfs
@@ -199,6 +188,44 @@ public class Graph<T> {
         return sb.toString();
     }
 
+    // Topological sort with DFS
+    // Use a visited set and a stack to hold visited vertices in reverse order
+    // for each vertex in the graph
+    // if it is not visited then call dfs
+    // dfs
+    // add node to visited list
+    // iterate over node's neighbors if they are not visited
+    // if node no longer has any unvisited neighbors then add to stack
+    // stack will add in node's with the highest in-degree and hold the values with the least or 0 indegree at the top
+    // once done traversing graph, remove each node from the stack and add to a string to be returned
+    public String topologicalRecursiveSort(){
+        StringBuilder sb = new StringBuilder("Topological Recursive Sort:");
+
+        Set<Vertex> visited = new HashSet<>();
+        Stack<Vertex> result = new Stack<>();
+        for(Vertex v : this.vertices){
+            if(!visited.contains(v)){
+                topologicalRecursiveSort(v, visited, result);
+            }
+        }
+
+        while(!result.isEmpty()){
+            sb.append(" " + result.pop().data());
+        }
+        return sb.toString();
+    }
+
+    private void topologicalRecursiveSort(Vertex root, Set<Vertex> visited, Stack<Vertex> result){
+        visited.add(root);
+
+        for(Vertex neighbor : this.getNeighbors(root)){
+            if(!visited.contains(neighbor)){
+                topologicalRecursiveSort(neighbor, visited, result);
+            }
+        }
+        result.push(root);
+    }
+
     // with : add new vertex & adjacency
     // should take in src vertex and list of adjacency (adjacency may need to be instantiated)
     // if src does not exist then create new vertex
@@ -250,6 +277,8 @@ public class Graph<T> {
         return this.adjacencyList.get(v);
     }
 
+    // Detect a cycle
+
     // convert to matrix
 
     // toString
@@ -267,4 +296,12 @@ public class Graph<T> {
         return sb.toString();
     }
 
-}
+    public String getVertices(List<Vertex> vertices){
+        StringBuilder sb = new StringBuilder();
+        for(Vertex v : vertices){
+            sb.append(" " + v.data());
+        }
+        return sb.toString();
+    }
+
+}}
