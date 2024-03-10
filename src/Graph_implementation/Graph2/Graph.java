@@ -197,7 +197,7 @@ public class Graph {
             Vertex curr = queue.remove();
             result.add(curr);
 
-            List<Vertex> currNeighbors = this.vertices.get(curr); 
+            List<Vertex> currNeighbors = this.vertices.get(curr);
             for(Vertex v : currNeighbors){
                 indegreeMap.put(v, indegreeMap.get(v) - 1);
                 if(indegreeMap.get(v) == 0){
