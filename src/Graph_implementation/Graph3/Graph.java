@@ -1,4 +1,6 @@
-package Graph_implementation.Graph3;
+package Graph;
+
+import Graph_implementation.Graph3.Edge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,13 @@ public class Graph<T> {
     // if undirected graph -> add start vertex to end bucket in adjacency list
     // if weighted create + add edge to edges list
 
+    // add adjacency with weight
+    // takes in a src and dest vertex and weight value
+    // create new edge and add to edge list
+    // add end vertex to start bucket in adjacency list
+    // if undirected graph -> add start vertex to end bucket in adjacency list
+    // if weighted create + add edge to edges list
+
     // dfs
     // take arbitrary starting node
     // create a visited list and unvisited stack
@@ -50,10 +59,10 @@ public class Graph<T> {
     // create a queue and add starting node
     // create a visited list
     // while queue is not empty
-        // remove vertex from queue and add to visited list
-        // iterate over vertex's neighbors
-        // if neighbor is not in visited list and not in queue
-            // add neighbor to queue
+    // remove vertex from queue and add to visited list
+    // iterate over vertex's neighbors
+    // if neighbor is not in visited list and not in queue
+    // add neighbor to queue
     // create string from visited list and return
 
     // topological sort (Khan's algorithm)
@@ -62,18 +71,28 @@ public class Graph<T> {
     // create a list of inbound degree values for each node in graph
     // create a queue and add all vertices with inbound degree of 0
     // while queue is not empty
-        // remove vertex from queue
-        // add vertex to visited list
-        // iterate over vertex neighbors
-            // update vertex neighbors degree -1
-            // if neighbor degree is 0 then add to queue
+    // remove vertex from queue
+    // add vertex to visited list
+    // iterate over vertex neighbors
+    // update vertex neighbors degree -1
+    // if neighbor degree is 0 then add to queue
     // create string from visited list and return
 
-    // get data
+    // with : add new vertex & adjacency
+    // should take in src vertex and list of adjacency (adjacency may need to be instantiated)
+    // if src does not exist then create new vertex
+    // iterate over list of adjacent vertices
+    // if neighbor does not exist then create new vertex
+    // add neighbor to adjacency list in src vertex bucket
+    // return this
 
     // get vertex
+    // iterate over vertices list
+    // check if vertex data matches given data
 
     // get neighbors
+    // if adjacency list does not contain vertex return empty list
+    // get list from adjacency list and return
 
     // convert to matrix
 
@@ -89,6 +108,11 @@ public class Graph<T> {
         public Vertex(T data){
             this.data = data;
             this.neighbors = new ArrayList<>();
+        }
+
+        // get data
+        public T data(){
+            return this.data;
         }
     }
 }
