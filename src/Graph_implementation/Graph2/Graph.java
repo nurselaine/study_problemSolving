@@ -175,17 +175,21 @@ public class Graph {
         Map<Vertex, Integer> indegreeMap = new HashMap<>();
         Queue<Vertex> queue = new LinkedList<>();
 
-        for(Map.Entry<Vertex, List<Vertex>> entry : this.vertices.entrySet()){
-            List<Vertex> neighbors = entry.getValue();
-            for(Vertex v : neighbors){
-                indegreeMap.put(v, indegreeMap.getOrDefault(v, 0) + 1);
+        // add all vertices to indegree map
+        for(Vertex v : this.vertices.keySet()){
+            indegreeMap.put(v, 0);
+        }
+
+        // update inbound degree for each indegreeMap values
+        for(Vertex v : indegreeMap.keySet()){
+            for(Vertex neighbor : this.vertices.get(v)){
+                indegreeMap.put(neighbor, indegreeMap.getOrDefault(neighbor, 0) + 1);
             }
         }
 
         for(Map.Entry<Vertex, Integer> entry : indegreeMap.entrySet()){
             if(entry.getValue() == 0){
                 queue.add(entry.getKey());
-                result.add(entry.getKey());
             }
         }
 
@@ -193,7 +197,7 @@ public class Graph {
             Vertex curr = queue.remove();
             result.add(curr);
 
-            List<Vertex> currNeighbors = this.vertices.get(curr);
+            List<Vertex> currNeighbors = this.vertices.get(curr); 
             for(Vertex v : currNeighbors){
                 indegreeMap.put(v, indegreeMap.get(v) - 1);
                 if(indegreeMap.get(v) == 0){
@@ -201,7 +205,13 @@ public class Graph {
                 }
             }
         }
-        return result.toString();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Topological Sort: ");
+        for(Vertex v : result){
+            sb.append(v.getData() + " ");
+        }
+        return sb.toString();
     }
 
 }
