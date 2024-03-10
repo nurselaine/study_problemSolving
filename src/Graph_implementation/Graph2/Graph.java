@@ -170,4 +170,38 @@ public class Graph {
         return sb.toString();
     }
 
+    public String topologicalSort(){
+        List<Vertex> result = new ArrayList<>();
+        Map<Vertex, Integer> indegreeMap = new HashMap<>();
+        Queue<Vertex> queue = new LinkedList<>();
+
+        for(Map.Entry<Vertex, List<Vertex>> entry : this.vertices.entrySet()){
+            List<Vertex> neighbors = entry.getValue();
+            for(Vertex v : neighbors){
+                indegreeMap.put(v, indegreeMap.getOrDefault(v, 0) + 1);
+            }
+        }
+
+        for(Map.Entry<Vertex, Integer> entry : indegreeMap.entrySet()){
+            if(entry.getValue() == 0){
+                queue.add(entry.getKey());
+                result.add(entry.getKey());
+            }
+        }
+
+        while(!queue.isEmpty()){
+            Vertex curr = queue.remove();
+            result.add(curr);
+
+            List<Vertex> currNeighbors = this.vertices.get(curr);
+            for(Vertex v : currNeighbors){
+                indegreeMap.put(v, indegreeMap.get(v) - 1);
+                if(indegreeMap.get(v) == 0){
+                    queue.add(v);
+                }
+            }
+        }
+        return result.toString();
+    }
+
 }
