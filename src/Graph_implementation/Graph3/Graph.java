@@ -81,7 +81,7 @@ public class Graph<T> {
     // add curr vertex to visited list
     // get vertex neighbors + iterate over neighbors
     // if not found in visited list then call dfsHelper with neighbor node
-    public String DFS(T root){
+    public String DFS(){
         Set<Vertex> visited = new HashSet<>();
         StringBuilder sb = new StringBuilder("DFS:");
         for(Vertex v : this.vertices){
@@ -103,31 +103,30 @@ public class Graph<T> {
         }
     }
 
-    // bfs
-    // take arbitrary starting node
-    // create a queue and add starting node
-    // create a visited list
-    // while queue is not empty
-    // remove vertex from queue and add to visited list
-    // iterate over vertex's neighbors
-    // if neighbor is not in visited list and not in queue
-    // add neighbor to queue
-    // create string from visited list and return
-    public String BFS(T root){
-        Vertex start = this.getVertex(root);
-        if(start == null) throw new InvalidParameterException("Vertex does not exist in graph");
-
+    // BFS
+    // Use a visited list and a queue
+    // iterate over all vertices in the list
+    // if the vertex has not been visited then add curr vertex into queue
+    // while the queue is not empty then pop off from queue
+    // add vertex to visited
+    // iterate over curr neighbors
+    // if neighbor is not in visited or in queue then add to queue
+    public String BFS(){
         Queue<Vertex> queue = new LinkedList<>();
         List<Vertex> visited = new ArrayList<>();
         StringBuilder sb = new StringBuilder("BFS:");
-        queue.add(start);
+        for(Vertex v : this.vertices){
+            if(!visited.contains(v) && !queue.contains(v)){
+                queue.add(v);
 
-        while(!queue.isEmpty()){
-            Vertex curr = queue.remove();
-            visited.add(curr);
-            for(Vertex v : this.getNeighbors(curr)){
-                if(!visited.contains(v) && !queue.contains(v)){
-                    queue.add(v);
+                while(!queue.isEmpty()){
+                    Vertex curr = queue.remove();
+                    visited.add(curr);
+                    for(Vertex neighbor : this.getNeighbors(curr)){
+                        if(!visited.contains(neighbor) && !queue.contains(neighbor)){
+                            queue.add(neighbor);
+                        }
+                    }
                 }
             }
         }
@@ -304,4 +303,4 @@ public class Graph<T> {
         return sb.toString();
     }
 
-}}
+}
