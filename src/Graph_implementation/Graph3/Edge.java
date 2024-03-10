@@ -1,5 +1,7 @@
 package Graph_implementation.Graph3;
 
+import Graph_implementation.Graph3.Vertex;
+
 public class Edge {
 
     // starting vertex
