@@ -303,4 +303,8 @@ public class Graph<T> {
         return sb.toString();
     }
 
+    public List<Vertex> getVertices(){
+        return this.vertices;
+    }
+
 }

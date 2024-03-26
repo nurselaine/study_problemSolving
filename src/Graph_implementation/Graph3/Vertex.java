@@ -2,7 +2,7 @@ package Graph_implementation.Graph3;
 
 import java.util.List;
 
-class Vertex<T> {
+public class Vertex<T> {
 
     private T data;
     public Vertex(T data, List<T> neighbors){
