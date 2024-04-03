@@ -3,7 +3,7 @@ import java.util.Set;
 
 public class validSudoku {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         int[][] matrix = new int[][]{new int[]{1, 2, 3}, new int[]{3, 1, 2}, new int[]{2, 3, 1}};
         boolean result = checkValid(matrix);
         System.out.println(result);
@@ -36,7 +36,7 @@ public class validSudoku {
      *
      * return true
      * */
-    public static boolean checkValid(int[][] matrix){
+    public static boolean checkValid(int[][] matrix) {
         int n = matrix.length;
         Set<Integer> set = new HashSet<>();
         for(int i = 1; i <= n; i++){
@@ -65,7 +65,7 @@ public class validSudoku {
         return true;
     }
 
-    private static boolean helper(int[] nums, Set<Integer> set, Set<Integer> oriSet, int n){
+    private static boolean helper(int[] nums, Set<Integer> set, Set<Integer> oriSet, int n) {
         for(int num : nums){
             if(set.contains(num)){
                 return false;
