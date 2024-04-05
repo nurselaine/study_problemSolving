@@ -11,6 +11,14 @@ public class validSudoku {
         matrix = new int[][]{new int[]{1, 1, 1}, new int[]{1, 2, 3}, new int[]{1, 2, 3}};
         result = checkValid(matrix);
         System.out.println(result);
+
+        matrix = new int[][]{new int[]{1, 2, 3}, new int[]{3, 1, 2}, new int[]{2, 3, 1}};
+        result = checkValid2(matrix);
+        System.out.println(result);
+
+        matrix = new int[][]{new int[]{1, 1, 1}, new int[]{1, 2, 3}, new int[]{1, 2, 3}};
+        result = checkValid2(matrix);
+        System.out.println(result);
     }
 
     /**
@@ -79,4 +87,34 @@ public class validSudoku {
         set.clear();
         return true;
     }
+
+    /**
+     * Use 2 sets - one for row sna one for cols
+     * iterate over all cells and check if
+     * */
+    public static boolean checkValid2(int[][] matrix){
+        int length = matrix.length;
+
+        for(int i = 0; i < length; i++){
+            Set<Integer> row = new HashSet<>();
+            Set<Integer> col = new HashSet<>();
+
+            for(int j = 0; j < length; j++){
+                if(!row.add(matrix[i][j]) || !col.add(matrix[j][i])){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * given a 9x9 grid - 
+     * */
+    public static boolean validSudoku(char[][] board){
+
+    }
+
+
 }
