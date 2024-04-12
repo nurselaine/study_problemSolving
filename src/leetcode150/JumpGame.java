@@ -195,20 +195,25 @@ public class JumpGame {
      * calculate max jump value between n-1 OR i + nums[i]
      * return Max between current maxJump AND maxJump - 1
      * */
+    public static int minJumps = Integer.MAX_VALUE;
     public static int jump(int[] nums){
-        return jump(nums, 0, 0);
+        jump(nums, 0, 0);
+        return minJumps;
     }
 
-    public static int jump(int[] nums, int index, int jumps){
+    public static boolean jump(int[] nums, int index, int jumps){
         if(index == nums.length - 1){
-            return jumps;
+            minJumps = Math.min(minJumps, jumps);
+            return true;
         }
 
         int maxJump = Math.min(nums.length - 1, index + nums[index]);
         for(int i = index + 1; i < maxJump; i++){
-            jumps = jump(nums, i + index, jumps + 1);
+            if(jump(nums, i + index, jumps + 1)){
+                return true;
+            }
         }
 
-        return jumps;
+        return false;
     }
 }
