@@ -6,14 +6,18 @@ public class JumpGame {
 
     public static void main(String[] args){
         int[] nums = new int[]{2,3,1,1,4};
-        boolean result = optimizedCanJump(nums);
-        System.out.println(result);
+//        boolean result = optimizedCanJump(nums);
+//        System.out.println(result);
+//
+//        result = bottomUpCanJump(nums);
+//        System.out.println(result);
+//
+//        result  = greedyCanJump(nums);
+//        System.out.println(result);
 
-        result = bottomUpCanJump(nums);
-        System.out.println(result);
+        int res = jump(nums);
+        System.out.println(res);
 
-        result  = greedyCanJump(nums);
-        System.out.println(result);
     }
 
     /**
@@ -175,5 +179,36 @@ public class JumpGame {
             }
         }
         return lastIndex == 0;
+    }
+
+
+    /**
+     * Jump Game II
+     * given an array, initially positioned at 0
+     *
+     * return the minimum # of jumps it takes to get to nums[n - 1]
+     *
+     * PLAN
+     * - backtracking
+     * check if index == n - 1 - return counter
+     *
+     * calculate max jump value between n-1 OR i + nums[i]
+     * return Max between current maxJump AND maxJump - 1
+     * */
+    public static int jump(int[] nums){
+        return jump(nums, 0, 0);
+    }
+
+    public static int jump(int[] nums, int index, int jumps){
+        if(index == nums.length - 1){
+            return jumps;
+        }
+
+        int maxJump = Math.min(nums.length - 1, index + nums[index]);
+        for(int i = index + 1; i < maxJump; i++){
+            jumps = jump(nums, i + index, jumps + 1);
+        }
+
+        return jumps;
     }
 }
