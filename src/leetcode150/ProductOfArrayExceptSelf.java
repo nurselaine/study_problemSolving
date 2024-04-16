@@ -6,7 +6,8 @@ public class ProductOfArrayExceptSelf {
 
     public static void main(String[] args){
         int[] nums = new int[]{1, 2, 3, 4};
-        nums = productExceptSelf(nums);
+//        nums = productExceptSelf(nums);
+        nums = productExceptSelfII(nums);
         for(int n : nums){
             System.out.println(n + " ");
         }
@@ -67,5 +68,32 @@ public class ProductOfArrayExceptSelf {
 
         return nums;
 
+    }
+
+
+    /**
+     * PLAN do not use extra space
+     * declare a prefix variable to hold the
+     * */
+    public static int[] productExceptSelfII(int[] nums){
+        int[] prefixArr = new int[nums.length];
+        prefixArr[0] = 1;
+
+        int prefix =1;
+        for(int i = 1; i < nums.length; i++){
+            prefixArr[i] = prefix * nums[i - 1];
+            prefix = prefixArr[i];
+        }
+
+        prefix = 1;
+        // 1 1 2 6
+        // 1 2 3 4
+        //     8 6
+        for(int i = nums.length - 1; i >= 0; i--){ // 0
+            int next = nums[i]; // 1
+            nums[i] = prefix * prefixArr[i]; // 24 * 1 = 24
+            prefix *= next; // 12 * 2 = 24
+        }
+        return nums;
     }
 }
