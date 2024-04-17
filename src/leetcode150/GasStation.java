@@ -5,12 +5,14 @@ public class GasStation {
     public static void main(String[] args){
         int[] gas = new int[]{1, 2, 3, 4, 5};
         int[] cost = new int[]{3, 4, 5, 1, 2};
-        int result = canCompleteCircuit(gas, cost);
+//        int result = canCompleteCircuit(gas, cost);
+        int result = greedyCanCompleteCircuit(gas, cost);
         System.out.println(result);
 
         gas = new int[]{2, 3, 4};
         cost = new int[]{3, 4, 3};
-        result = canCompleteCircuit(gas, cost);
+//        result = canCompleteCircuit(gas, cost);
+        result = greedyCanCompleteCircuit(gas, cost);
         System.out.println(result);
 
         // 2 3 4
@@ -88,5 +90,52 @@ public class GasStation {
         }
 
         return -1;
+    }
+
+    /**
+     * Optimized - greedy solution
+     *
+     * Use an array gain to caluclate net change between gas[i] - cost[i]
+     *
+     * at each elemetn i, the amont of gas is changed by gain[i]
+     * if gas total drops below 0 then the next element cannot be reached
+     *
+     * Iterate over N elements
+     * calculate net gain for each element in a total variable
+     * if the total variable is >= 0 then return the last starting index - 1
+     * where the net gain was > 0 otherwise return -1
+     * */
+
+    // 1 2 3 4 5
+    // 4 5 1 2 3
+
+    // -3 -3 2 2 2
+
+    // 2 3 4
+    // 3 4 3
+
+    // -1 -1 1
+    /**
+     * Plan
+     * declare a total and current total accumulator
+     *
+     * check if the currentTotal falls below 0 - this means that
+     * the
+     * */
+    public static int greedyCanCompleteCircuit(int[] gas, int[] cost){
+        int total = 0;
+        int start = 0;
+        int currTotal = 0;
+
+        for(int i = 0; i < gas.length; i++){
+            currTotal += gas[i] - cost[i];
+            total += gas[i] - cost[i];
+            if(currTotal < 0){
+                start = i + 1;
+                currTotal = 0;
+            }
+        }
+
+        return total >= 0 ? start : -1;
     }
 }

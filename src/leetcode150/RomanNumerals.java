@@ -22,14 +22,16 @@ public class RomanNumerals {
 //        result = refactorRomanToInt("MCMXCIV");
 //        System.out.println(result);
 
-        int result = refactorRomanToInt("IV");
-        System.out.println(result);
+//        int result = refactorRomanToInt("IV");
+//        System.out.println(result);
 
 //        result = romanToInt("III");
 //        System.out.println(result);
 //        result = romanToInt("LVIII");
 //        System.out.println(result);
 
+        String res = intToRoman(10);
+        System.out.println(res);
     }
 
 
@@ -90,5 +92,57 @@ public class RomanNumerals {
             }
         }
         return total;
+    }
+
+
+    /**
+     * Convert an integer to its roman numberal symbol
+     *
+     *
+     * 3 - III
+     *
+     * 58
+     * 8 - VIII
+     * 50 - L
+     * LVIII
+     *
+     * 1994
+     * 4 - IV
+     * 90 - XC
+     * 900 - CM
+     * 1000 - M
+     * MCMXCIV
+     *
+     * check if
+     * 1. digit < 4
+     * 2. digit <
+     * PLAN
+     * initialize array with values 1 - 9 in sorted order and array
+     * with roman numeral symbol
+     * 1 4 5 9 10
+     * fn - find the greatest value roman numeral that fits into digit
+     * while digit > 0
+     *
+     * find the smallest digit in map that fits into digit
+     *
+     * subtract digit with largest factor amount
+     * update result value with result from map
+     * */
+    public static String intToRoman(int num){
+        String[] numeral = new String[]{"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+        String result = "";
+        int multiplier = 1;
+
+        while(num > 0){
+            int digit = (num % 10);
+            if(digit > 0){
+                result += numeral[digit - 1] ;
+            }
+            num /= 10;
+            multiplier *= 10;
+
+        }
+
+        return result;
     }
 }
