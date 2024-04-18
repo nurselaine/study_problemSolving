@@ -30,8 +30,11 @@ public class RomanNumerals {
 //        result = romanToInt("LVIII");
 //        System.out.println(result);
 
-        String res = intToRoman(10);
+        String res = intToRoman(16);
         System.out.println(res);
+        res = intToRoman(1996);
+        System.out.println(res);
+
     }
 
 
@@ -129,18 +132,17 @@ public class RomanNumerals {
      * update result value with result from map
      * */
     public static String intToRoman(int num){
-        String[] numeral = new String[]{"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+        int[] values = new int[]{1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        String[] numeral = new String[]{"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
         String result = "";
-        int multiplier = 1;
+        // 12
 
-        while(num > 0){
-            int digit = (num % 10);
-            if(digit > 0){
-                result += numeral[digit - 1] ;
+        for(int i = 0; i < values.length; i++){
+
+            while(values[i] <= num){ // 1 <= 0
+                num -= values[i]; // 1 - 1 = 0
+                result += numeral[i]; // X I I
             }
-            num /= 10;
-            multiplier *= 10;
-
         }
 
         return result;
