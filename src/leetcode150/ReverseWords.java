@@ -10,6 +10,10 @@ public class ReverseWords {
         s = "the sky is blue";
         res = reverseWords(s);
         System.out.println(res);
+
+        s = "a good  example";
+        res = reverseWords(s);
+        System.out.println(res);
     }
 
 
@@ -35,7 +39,7 @@ public class ReverseWords {
         StringBuilder sb = new StringBuilder();
 
         for(int i = sArr.length - 1; i >= 0; i--){
-            if(!sArr[i].equals(" ")){
+            if(!sArr[i].isEmpty()){
                 sb.append(sArr[i] + " ");
             }
         }
