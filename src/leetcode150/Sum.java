@@ -5,14 +5,6 @@ import java.util.*;
 public class Sum {
 
     public static void main(String[] args){
-        int[] nums = new int[]{-1, 0, 1, 2, -1, -4};
-        List<List<Integer>> res = threeSum(nums);
-        for(List<Integer> l : res){
-            for(int n : l){
-                System.out.print(n + " ");
-            }
-            System.out.println();
-        }
 //        int[] nums = new int[]{2, 7, 11, 15};
 //        int[] res = twoSum(nums, 9);
 //        for(int n : res){
@@ -40,6 +32,32 @@ public class Sum {
 //        for(int n : res){
 //            System.out.print(n + " ");
 //        }
+
+        // testing 3sum
+//        int[] nums = new int[]{-1, 0, 1, 2, -1, -4};
+//        List<List<Integer>> res = threeSum(nums);
+//        for(List<Integer> l : res){
+//            for(int n : l){
+//                System.out.print(n + " ");
+//            }
+//            System.out.println();
+//        }
+
+        // testing minimum size subarray sum
+        int[] nums = new int[]{2, 3, 1,2, 4, 3};
+        int target = 7;
+        int res = minSubArrayLen(target, nums);
+        System.out.println("result :" + res);
+
+        nums = new int[]{1, 4, 4};
+        target = 4;
+        res = minSubArrayLen(target, nums);
+        System.out.println(res);
+
+        nums = new int[]{1,1,1,1,1,1,1,1};
+        target = 11;
+        res = minSubArrayLen(target, nums);
+        System.out.println(res);
     }
 
     /**
@@ -136,5 +154,43 @@ public class Sum {
                 r--;
             }
         }
+    }
+
+    /**
+     * Given an array of positive integers and a target, return
+     * the length of a subarray whose sum is >= target
+     * if there is no subarray then return 0
+     *
+     * do not sort the array
+     *
+     * PLAN
+     * initialize a l and r ptr
+     * declare running sum and res
+     * iterate over nums while l < len of nums
+     * if running sum < target
+     * - increment r (update running sum)
+     * if running sum >= target
+     * - update res with min(res, r - l + 1)
+     * - increment l and subtract from running sum
+     * */
+    public static int minSubArrayLen(int target, int[] nums){
+        int l = 0;
+        int r = 0;
+        int runningSum = 0;
+        int res = Integer.MAX_VALUE;
+        while(l < nums.length){
+            while(r < nums.length && runningSum < target){
+                runningSum+= nums[r];
+                r++;
+            }
+
+            if(runningSum >= target){
+                res = Math.min(res, r - l);
+            }
+
+            runningSum -= nums[l];
+            l++;
+        }
+        return res > nums.length ? 0 : res;
     }
 }
