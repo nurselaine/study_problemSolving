@@ -174,23 +174,21 @@ public class Sum {
      * - increment l and subtract from running sum
      * */
     public static int minSubArrayLen(int target, int[] nums){
-        int l = 0;
-        int r = 0;
-        int runningSum = 0;
-        int res = Integer.MAX_VALUE;
-        while(l < nums.length){
-            while(r < nums.length && runningSum < target){
-                runningSum+= nums[r];
-                r++;
+        int right = 0;
+        int sum = 0;
+        int result = Integer.MAX_VALUE;
+        for(int i = 0; i < nums.length; i++){
+
+            while(right < nums.length && sum < target){
+                sum += nums[right];
+                right++;
             }
 
-            if(runningSum >= target){
-                res = Math.min(res, r - l);
+            if(sum >= target){
+                result = Math.min(result, right - i);
             }
-
-            runningSum -= nums[l];
-            l++;
+            sum -= nums[i];
         }
-        return res > nums.length ? 0 : res;
+        return result == Integer.MAX_VALUE ? 0 : result;
     }
 }
