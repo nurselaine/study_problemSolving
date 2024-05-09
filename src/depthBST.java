@@ -1,3 +1,5 @@
+import Node.Node;
+
 public class depthBST {
 
     public static void main(String[] args){
