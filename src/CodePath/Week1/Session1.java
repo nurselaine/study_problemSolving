@@ -2,12 +2,61 @@ package CodePath.Week1;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Session1 {
 
     public static void main(String[] args){
-        p5DestinationCityTest();
+//        p5DestinationCityTest();
+        testRomanToInt();
+    }
+
+    public static void testRomanToInt(){
+        String r = "III";
+        int res = romanToInt(r);
+        System.out.println(res);
+        r = "MCMXCIV";
+        res = romanToInt(r);
+        System.out.println(res);
+    }
+
+    /**
+     * Roman to Int
+     *
+     * Convert a string roman numeral to its int value
+     *
+     * PLAN
+     * Use a map to map the char to it's int value
+     *
+     * initialize a total value
+     * iterate over string
+     * add each char value (grab from map) to total
+     * and check if the char is less than it's suceding character
+     * if it is then subtract the current char value
+     *
+     * return the total
+     *
+     * */
+    public static int romanToInt(String str){
+        Map<Character, Integer> map = new HashMap<>();
+        map.put('I', 1);
+        map.put('V', 5);
+        map.put('X', 10);
+        map.put('L', 50);
+        map.put('C', 100);
+        map.put('D', 500);
+        map.put('M', 1000);
+
+        int total = 0;
+        for (int i = 0; i < str.length(); i++){
+            if(i != str.length() - 1 && map.get(str.charAt(i)) < map.get(str.charAt(i + 1))){
+                total -= map.get(str.charAt(i));
+            } else {
+                total += map.get(str.charAt(i));
+            }
+        }
+        return total;
     }
 
     public static void p5DestinationCityTest(){
