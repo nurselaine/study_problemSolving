@@ -133,29 +133,15 @@ public class Session2 {
      * Test KthLargest Class
      * */
     public static void testKthLargestClass(){
-        List<Integer> l = new ArrayList<>();
-        l.add(4);
-        l.add(5);
-        l.add(8);
-        l.add(2);
-        KthLargestElement ktest = new KthLargestElement(3, l);
-        int res = ktest.getKthLargest();
-        System.out.print(res + " ");
-        ktest.add(3);
-        res = ktest.getKthLargest();
-        System.out.print(res + " ");
-        ktest.add(5);
-        res = ktest.getKthLargest();
-        System.out.print(res + " ");
-        ktest.add(10);
-        res = ktest.getKthLargest();
-        System.out.print(res + " ");
-        ktest.add(9);
-        res = ktest.getKthLargest();
-        System.out.print(res + " ");
-        ktest.add(4);
-        res = ktest.getKthLargest();
-        System.out.print(res + " ");
+
+        KthLargestElement ktest = new KthLargestElement(3, new int []{4, 5, 8, 2});
+        int res = ktest.add(10);
+        System.out.println(res);
+        res = ktest.add(15);
+        System.out.println(res);
+        res = ktest.add(10);
+        System.out.println(res);
+
     }
 }
 
@@ -168,39 +154,34 @@ public class Session2 {
  * k = 3
  * add([4, 5, 8 2]
  * getKthLargest() => 5
- * add(3)
+ * add(3) [4, 5. 8, 2,3]
  * getKthLargest() => 4
- * add(5)
- * getKthLargest() => 
- * add
+ * add(5) [4, 5. 8, 2, 5]
+ * getKthLargest() => 5
+ * add(10) => 5
  * */
 class KthLargestElement {
 
     public int k;
-    public List<Integer> nums;
     private PriorityQueue<Integer> minHeap;
-    public KthLargestElement(int k, List<Integer> nums){
+    public KthLargestElement(int k, int[] nums){
         this.k = k;
-        this.nums = nums;
         this.minHeap = new PriorityQueue<>();
         for(int i : nums){
-            if(minHeap.size() == (this.nums.size() - this.k)){
+            minHeap.offer(i);
+            if(minHeap.size() > k){
                 minHeap.poll();
             }
-            minHeap.offer(i);
         }
     }
 
-    public void add(int n){
-        this.nums.add(n);
-        if(minHeap.size() == (nums.size() - k)){
+    public int add(int val){
+        minHeap.add(val);
+
+        if(minHeap.size() > k){
             minHeap.poll();
         }
-        minHeap.offer(n);
-    }
 
-    public int getKthLargest(){
-        if(minHeap.isEmpty()) return -1;
         return minHeap.peek();
     }
 }
@@ -273,5 +254,17 @@ class MinStack {
 
     public int getMin(){
         return minStack.peek();
+    }
+}
+
+class RecentCounter {
+    public int privateRequests;
+    private int timeElaspe;
+    public RecentCounter(){
+        privateRequests = 0;
+    }
+
+    public int ping(int t){
+        return -1;
     }
 }
