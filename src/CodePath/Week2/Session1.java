@@ -189,8 +189,14 @@ public class Session1 {
      * - => return null if curr is null
      * - otherwise keep iterating over the ll until
      * curr visits a node in set and then return prev
-     * IRE
-     *
+     * I
+     * R
+     * - iterate over list nodes and add each visited node to a set
+     * - use two pointers a curr and prev and as soon as curr node
+     * is found in the set, return prev node - otherwise return null
+     * E
+     * time: O(N)
+     * space: O(N)
      * */
     public static ListNode linkedListCycleII(ListNode head){
         Set<ListNode> visited = new HashSet<>();
@@ -198,12 +204,51 @@ public class Session1 {
         ListNode prev = null;
         while(curr != null){
             if(visited.contains(curr)){
-                return prev;
+                return curr;
             }
             visited.add(curr);
             prev = curr;
             curr = curr.next;
         }
         return null;
+    }
+
+    /**
+     * Solve Linked List cycle II in constant space
+     *
+     * U
+     * find the point where a cycle begins in a LL
+     *
+     * M
+     * - two pointers and temp node to explore the ll
+     *
+     * P
+     * - assign a fast and slow pointer, find where the fast and slow
+     * pointer meet in the ll (detect a cycle)
+     * - return null of fast pointer is null or points to null (no cycle)
+     * - using the head pointer given, iterate the same speed with slow pointer
+     * which will give the point where the cycle begins when head and slow pointer
+     * meet
+     * IRE
+     * */
+    public static ListNode linkedListCycleIIv2(ListNode head){
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while(fast != null || fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+            if(slow == fast){
+                break;
+            }
+        }
+        if(fast == null || fast.next == null){
+            return null;
+        }
+        while(head != slow){
+            head = head.next;
+            slow = slow.next;
+        }
+        return head;
     }
 }
