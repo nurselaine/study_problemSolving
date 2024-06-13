@@ -7,9 +7,24 @@ import java.util.Set;
 
 public class Session1 {
     public static void main(String[] args){
-        testLinkListCycleII();
+        testRemoveDuplicates();
     }
 
+    public static void testRemoveDuplicates(){
+        ListNode node1 = new ListNode(1);
+        ListNode node2 = new ListNode(2);
+        ListNode node3 = new ListNode(6);
+        ListNode node4 = new ListNode(8);
+        ListNode node5 = new ListNode(2);
+        node1.next = node2;
+        node2.next = node5;
+        node5.next = node3;
+        node3.next = node4;
+        printLL(node1);
+        ListNode newList = removeDuplicates(node1);
+        printLL(newList);
+
+    }
     public static void testLinkListCycleII(){
         ListNode node1 = new ListNode(1);
         ListNode node2 = new ListNode(2);
@@ -248,6 +263,54 @@ public class Session1 {
         while(head != slow){
             head = head.next;
             slow = slow.next;
+        }
+        return head;
+    }
+
+
+    /**
+     * U
+     * Remove a node from a ll given the node and the ll
+     *
+     * questions
+     * - will the provided node always be in the ll?
+     * - How large/small is the ll
+     * - any time/space constraints?
+     * - can there be multiple of a given node? yes
+     *
+     * example
+     * head -> 1 -> 2 -> 3 -> null; node = 2
+     *  => head -> 1 -> 3 -> null
+     *          1         2
+     *  head -> 1 -> 2 -> 3 -> 2 -> null; node = 2
+     *      *  => head -> 1 -> 3 -> null
+     *  head -> 1 -> 1 -> 1 -> null; node = 1
+     *      => head -> null
+     *  head -> null => null
+     * M
+     * - multiple passes
+     * - temp node
+     * - two pointers
+     *
+     * P
+     * - instantiate 2 pointers, p1 & p2
+     * - iterate over the list until p2 reaches the end
+     * - while iterating over the list
+     * - check while p2 == give and p1 == p2 node => move p2
+     * - update p1.next to p2
+     * - reassign p1 to p2
+     * IRE
+     *
+     * */
+    public static ListNode removeDuplicates(ListNode head){
+        ListNode p1 = head;
+        ListNode p2 = head;
+        while(p2 != null){
+            while(p2 != null && p1.val == p2.val){
+                p2 = p2.next;
+            }
+            p1.next = p2;
+            p1 = p2;
         }
         return head;
     }
