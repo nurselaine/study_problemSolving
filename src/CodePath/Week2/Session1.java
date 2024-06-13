@@ -2,12 +2,39 @@ package CodePath.Week2;
 
 import Node.ListNode;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Session1 {
     public static void main(String[] args){
-        testReverseLL();
+        testLinkListCycleII();
     }
 
+    public static void testLinkListCycleII(){
+        ListNode node1 = new ListNode(1);
+        ListNode node2 = new ListNode(2);
+        ListNode node3 = new ListNode(6);
+        ListNode node4 = new ListNode(8);
+        node1.next = node2;
+        node2.next = node3;
+        node3.next = node4;
+        node4.next = node2;
+        ListNode result = linkedListCycleII(node1);
+        System.out.println("Cycle starts at: " + result.val);
+        ListNode node = new ListNode(1);
+        result = linkedListCycleII(node);
+        System.out.println("Cycle starts at: " + result);
 
+        ListNode node5 = new ListNode(1);
+        ListNode node6 = new ListNode(2);
+        ListNode node7 = new ListNode(6);
+        ListNode node8 = new ListNode(8);
+        node5.next = node6;
+        node6.next = node7;
+        node7.next = node8;
+        printLL(node5);
+        System.out.println("Cycle starts at: " + result);
+    }
 
     public static void testRemoveElements(){
         ListNode node1 = new ListNode(1);
@@ -129,5 +156,54 @@ public class Session1 {
             curr = next;
         }
         return prev;
+    }
+
+    /**
+     * U
+     * - Detect whether there is a cycle in the linked list and
+     * return the node where the cycle starts
+     *
+     * Questions
+     * - Will there always be a cycle?
+     * - Can the LL be emtpy -> return null?
+     * - Is this a singly linked list?
+     * - What are the size and time constraints?
+     *
+     * Example
+     * head => 1 -> 2 -> 3 -> 8
+     *              ^---------|
+     *      => returns node 8
+     * head => 1 -> 2 -> 3 -> null
+     *  => return null
+     *  head => null
+     *      *  => return null
+     * M
+     * - temp node to iterate over + visited hashset to track
+     * visited nodes
+     * - two pointers, curr and prev + visited set
+     *
+     * P
+     * - Initialize a visited set and a prev and curr temp node
+     * - iterate over the list
+     * - update prev to curr & add curr to the visited set
+     * - => return null if curr is null
+     * - otherwise keep iterating over the ll until
+     * curr visits a node in set and then return prev
+     * IRE
+     *
+     * */
+    public static ListNode linkedListCycleII(ListNode head){
+        Set<ListNode> visited = new HashSet<>();
+        ListNode curr = head;
+        ListNode prev = null;
+        while(curr != null){
+            if(visited.contains(curr)){
+                return prev;
+            }
+            visited.add(curr);
+            prev = curr;
+            curr = curr.next;
+        }
+        return null;
     }
 }
