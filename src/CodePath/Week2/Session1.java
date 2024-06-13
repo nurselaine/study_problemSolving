@@ -314,4 +314,60 @@ public class Session1 {
         }
         return head;
     }
+
+    /**
+     * Design a Linked List either singly or doubly
+     * Node: val & next attributes
+     *
+     * Class name is MyLinkedList
+     *
+     * get(int index)
+     * void addAtHead(int val)
+     * void addAtTail(int val)
+     * void addAtIndex(int index, int val)
+     * void deleteAtIndex(int index)
+     *
+     * - Are there any space/time constraints?
+     * - what sort of elements should the list take => int
+     * - how large can the linked list class be able to handle?
+     * - will the provided index be 0-indexed?
+     *
+     * Plan
+     * initialize a size value
+     * create a head pointer
+     * create a tail pointer
+     *
+     * constructor
+     * - initialize have parameters for val (int), next (ptr), & prev (ptr)
+     * - initialize parameters for just val, next
+     * - initialize parameters for val only where next and prev are null
+     *
+     * int get(int index)
+     * - check if index is < size of LL => return -1
+     * - create a counter value & a temp node for iterating
+     * - if index is < size /2 then iterate from the front of the list
+     * - stop when counter is index - 1 value and return the current node
+     * - else when index > size / 2 iterate from the end of the list
+     * - stop when counter is size - counter == index & return the curr node value
+     *
+     * void addAtHead(int val)
+     * - create a new ListNode with val that points to the current head
+     * - update head to new list node
+     *
+     * void addAtTail(int val)
+     * - create a new ListNode with val that pointer prev pointer to tail pointer
+     * - update tail to point to new list node
+     *
+     * void addAtIndex(int index, int val)
+     * - initialize a counter
+     * - create a new node with val & temp node for iterating
+     * - check if index < size / 2
+     * - iterate from head and increment counter each step
+     * - when counter == index - 1
+     *  => update new node to pointer to temp.next and curr.next to pointer to new node
+     * - else if index >= size / 2
+     * - iterate from the tail and increment counter
+     * - when size - counter == index
+     *  => update new node prev point to curr.prev and new node next to curr and curr
+     * */
 }
