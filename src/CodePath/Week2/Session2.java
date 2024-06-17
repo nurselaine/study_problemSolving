@@ -7,6 +7,60 @@ import java.util.Stack;
 
 public class Session2 {
     public static void main(String[] args){
+        testPalindromeLinkedList();
+    }
+
+    public static void testPalindromeLinkedList(){
+        ListNode head = new ListNode(1);
+        ListNode node2 = new ListNode(2);
+        ListNode node3 = new ListNode(2);
+        ListNode node4 = new ListNode(1);
+        head.next = node2;
+        node2.next = node3;
+        node3.next = node4;
+        boolean res = palindromeLL(head);
+        System.out.println(res);
+
+        ListNode head2 = new ListNode(1);
+        ListNode node5 = new ListNode(9);
+        ListNode node6 = new ListNode(1);
+        ListNode node7 = new ListNode(1);
+        ListNode node8 = new ListNode(1);
+        head2.next = node5;
+        node5.next = node6;
+        node6.next = node7;
+        node7.next = node8;
+        res = palindromeLL(head2);
+        System.out.println(res);
+
+    }
+
+    public static void testAddTwoNumberI(){
+        ListNode head = new ListNode(9);
+        ListNode node2 = new ListNode(9);
+        ListNode node3 = new ListNode(9);
+        ListNode node4 = new ListNode(9);
+        ListNode node5 = new ListNode(9);
+        head.next = node2;
+        node2.next = node3;
+        node3.next = node4;
+        node4.next = node5;
+
+        ListNode l2 = new ListNode(9);
+        ListNode l2Node2 = new ListNode(9);
+        ListNode l2Node3 = new ListNode(9);
+        l2.next = l2Node2;
+        l2Node2.next = l2Node3;
+        // 9 9 9 9 9
+        // 9 9 9
+        // 8 9 9 0 0 1
+        ListNode emptyList = addTwoNumbersI(head, l2);
+        printLL(emptyList);
+
+    }
+
+
+    public static void testAddTwoNumbersR(){
         ListNode head = new ListNode(9);
         ListNode node2 = new ListNode(9);
         ListNode node3 = new ListNode(9);
@@ -28,7 +82,6 @@ public class Session2 {
         System.out.println();
         ListNode res = addTwoNumber(head, l2);
         printLL(res);
-
     }
 
     public static void testRemoveNthNode(){
@@ -195,4 +248,152 @@ public class Session2 {
      * -
      * IRE
      * */
+
+    public static ListNode addTwoNumbersI(ListNode l1, ListNode l2){
+
+        ListNode res = new ListNode(0);
+        ListNode temp = res;
+        int carry = 0;
+
+        while(l1 != null || l2 != null){
+            int l1Sum = 0;
+            int l2Sum = 0;
+            if(l1 != null){
+                l1Sum = l1.val;
+                l1 = l1.next;
+            }
+            if(l2 != null){
+                l2Sum = l2.val;
+                l2 = l2.next;
+            }
+            int totalSum = l1Sum + l2Sum + carry;
+            carry = totalSum / 10;
+            temp.next = new ListNode(totalSum % 10);
+            temp = temp.next;
+        }
+        if(carry > 0){
+            temp.next = new ListNode(carry);
+        }
+        return res.next;
+    }
+
+    /**
+     * Palindrome LinkedList: given the head of a singly linked list
+     * return true if it is a palindrome or false otherwise
+     *
+     * questions:
+     * - What is a palindrome: CATTAC => yes    RAT => no
+     * - Is an empty linked list considered a palindrome? at least 1 node
+     * - Is a single node considered a palindrome?
+     * - How long/large can the list become? 1-10^5
+     * - What type value are the node vals? => integer
+     * - how large can the integers be in each node => 0-9
+     *
+     * examples
+     * - 1-> 2-> 2 -> 1 -> null => true
+     *                s              f
+     * - 1 -> 2 -> 3 -> 2 -> 1 -> null
+     *                          sf
+     * - 1-> 2-> 3-> null => false
+     * - 1 -> 1-> 1 -> 1 -> null => false
+     * - 1 -> null => true
+     *
+     * if f.next => null then odd num palindrome
+     * - there can be one value without a matching pair
+     * if f => null then even num palindrome
+     *
+     *
+     * Methods
+     * - 2 pointers, fast and slow to find midpoint + stack
+     * - multiple passes, not time efficient
+     *
+     * PLAN
+     * - Initialize a fast and slow ptr, move fast ptr 2x as fast as slow
+     * - Create a stack
+     * - iterate over list with ptrs while slow is not null
+     * - move slow and fast ptrs as described
+     * - each slow move, add val to stack
+     * - when fast reaches end of LL, continue moving slow
+     * - and pop off the stack for each matching value until
+     * slow reaches end of LL or non-matching values found => return false
+     * - otherwise return true
+     *
+     * Review
+     * Eval
+     * Time: O(N)
+     * Space: O(1) best, O(N) worse
+     * */
+    public static boolean palindromeLinkedList(ListNode head){
+        if(head.next == null){
+            return true;
+        }
+        ListNode f = head;
+        ListNode s = head;
+        Stack<Integer> stack = new Stack<>();
+
+        while(s != null && f != null){
+            while(f != null && f.next != null){
+                stack.push(s.val);
+                s = s.next;
+                f = f.next.next;
+            }
+
+            if (f != null && f.next == null){
+                s = s.next;
+            }
+
+            while(!stack.isEmpty() && s != null){
+                if(s.val != stack.peek()){
+                    return false;
+                }
+                stack.pop();
+                s = s.next;
+            }
+        }
+        return true;
+    }
+
+    public static boolean palindromeLL(ListNode head){
+        if(head.next == null){
+            return true;
+        }
+
+        ListNode fast = head;
+        ListNode slow = head;
+        ListNode stack = head;
+        while(slow != null && fast != null){
+            while(fast != null && fast.next != null){
+                slow = slow.next;
+                fast = fast.next.next;
+            }
+
+            if(fast != null){
+                slow = slow.next;
+            }
+            slow = reverseList(slow);
+
+            while(slow != null){
+                if(slow.val != stack.val){
+                    return false;
+                }
+                slow = slow.next;
+                stack = stack.next;
+            }
+        }
+        return true;
+    }
+
+    private static ListNode reverseList(ListNode head){
+        ListNode curr = head;
+        ListNode next = head;
+        ListNode prev = null;
+
+        while(curr != null){
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
 }
