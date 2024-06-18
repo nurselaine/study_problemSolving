@@ -7,8 +7,45 @@ import java.util.Stack;
 
 public class Session2 {
     public static void main(String[] args){
-        testPalindromeLinkedList();
+        testSwapPairs();
     }
+
+    public static void testSwapPairs(){
+        ListNode head = new ListNode(1);
+        ListNode node2 = new ListNode(2);
+        ListNode node3 = new ListNode(3);
+        ListNode node4 = new ListNode(4);
+        ListNode node5 = new ListNode(5);
+        head.next = node2;
+        node2.next = node3;
+        node3.next = node4;
+        node4.next = node5;
+        printLL(head);
+        ListNode newList = swapPairs(head);
+        printLL(newList);
+    }
+
+
+    public static void testDuplicatesFromSortedList(){
+        ListNode head = new ListNode(1);
+        ListNode node2 = new ListNode(2);
+        ListNode node3 = new ListNode(3);
+        ListNode node4 = new ListNode(3);
+        ListNode node5 = new ListNode(4);
+        ListNode node6 = new ListNode(4);
+        ListNode node7 = new ListNode(5);
+        head.next = node2;
+        node2.next = node3;
+        node3.next = node4;
+        node4.next = node5;
+        node5.next = node6;
+        node6.next = node7;
+        printLL(head);
+        ListNode res = deleteDuplicates(head);
+        printLL(res);
+
+    }
+
 
     public static void testPalindromeLinkedList(){
         ListNode head = new ListNode(1);
@@ -395,5 +432,177 @@ public class Session2 {
             curr = next;
         }
         return prev;
+    }
+
+    /**
+     * Remove duplicates from an ascending sorted list II given
+     * the head of a LL, delete all the nodes that
+     * are duplicate numbers leaving
+     * only distinct numbers from the original list
+     * - the returning list should be sorted
+     *
+     * Questions?
+     * - Are the numbers positive and negative?
+     * - Can the list be empty?
+     * - How large can the list get?
+     * - will there always be duplicates?
+     * - If there is only one int then do we return null?
+     *
+     * Example
+     * - 1 -> 2 -> 2 -> 3 -> null
+     * => 1 -> 3 -> null
+     * - 1 -> 1 -> null
+     * => null
+     * - 1 -> null => 1 -> null
+     *
+     * Methods
+     * - Use a temp node bc we want to manipulate the LL
+     * - use two pointers to track which nodes to skip
+     *
+     * PLAN
+     * - Create a temp node and create a curr, prev, and next ptr
+     * - iterate over the ll until curr is null
+     * - check if curr == next then keep moving next until
+     * curr != next then point curr.next to the new next
+     * and point prev to curr.next to get rid of any duplicates
+     * - continue until curr reaches the end
+     * return the head node
+     *
+     * Evaluate:
+     * - time: O(N)
+     * - Space: O(1)
+     * */
+    // 0 1 2 3 3 4 4 5
+    //     p     c
+    // 0 1 2 5
+    //       p c
+    public static ListNode removeDuplicatesII(ListNode head){
+        ListNode temp = new ListNode(0);
+        temp.next = head;
+        ListNode curr = head;
+        ListNode prev = temp;
+
+        while(prev != null && curr != null){
+
+            ListNode next = curr.next;
+
+            if (next != null && curr.val == next.val){
+                while(curr != null && curr.val == next.val){
+                    next = next.next;
+                }
+                prev.next = next;
+                curr = next;
+            } else {
+                prev = curr;
+                curr = next;
+            }
+        }
+        return temp.next;
+    }
+
+    public static ListNode deleteDuplicates(ListNode head){
+        if(head == null || head.next == null) {
+            return head;
+        }
+
+        if (head.val != head.next.val){
+            head.next = deleteDuplicates(head.next);
+            return head;
+        } else {
+            while(head.next != null && head.val == head.next.val){
+                head = head.next;
+            }
+            return deleteDuplicates(head.next);
+        }
+    }
+
+    /**
+     * Swap every two adjacent nodes and return its head,
+     * do not modify the values of the nodes
+     *
+     * questions
+     * - In an odd number list, do we need to swap the last node?
+     * - How large can the list be?
+     * - Are there time/space constraints?
+     *
+     * example
+     * - 1 -> 2 -> 3 -> 4 -> null
+     * => 2 -> 1 -> 4 -> 3 -> null
+     * - 1 -> 2 -> 3 -> null
+     * => 2 -> 1 -> 3 -> null
+     * - 1 -> null
+     * => 1 -> null
+     *
+     * Methods
+     * - Use pointers + temp node, want to manipulate the LL
+     * > using a curr, next, front, and back ptr
+     *
+     * Plan
+     * initialize a temp head
+     * keep a ptr to the head
+     * iterate over list while there ptr .next.next is valid
+     * swap 2 nodes ahead of the ptr
+     * move the ptr to the second post-swapped node
+     * continue until reached end of list
+     *
+     * Evaluate
+     * - time: O(N)
+     * - space: O(N) - stack trace \ O(1) no new space created
+     * */
+    public static ListNode swapPairs(ListNode head){
+        ListNode temp = new ListNode(0);
+        temp.next = head;
+        swapPairsR(temp);
+        return temp.next;
+    }
+
+    private static ListNode swapPairsR(ListNode head){
+        if(head.next == null || head.next.next == null){
+            return head;
+        }
+        ListNode prev = head.next;
+        ListNode curr = head.next.next;
+        prev.next = curr.next; // null
+        curr.next = prev; // 3
+        head.next = curr;
+        return swapPairsR(prev);
+    }
+
+    public static ListNode reverseListII(ListNode head, int left ,int right){
+        ListNode l = head;
+        ListNode r = head;
+        ListNode prev = null;
+        int k = right - left;
+        int counter = k;
+        while(r != null && counter > 0){
+            r = r.next;
+            counter--;
+        }
+
+        if(r == null || r.next == null){
+            return reverseList(head);
+        }
+
+        while(r != null && counter < k - 1){
+            counter++;
+            prev = l;
+            l = l.next;
+            r = r.next;
+        }
+        ListNode next = null;
+        if(r.next == null){
+            next = null;
+        } else {
+            next = r.next;
+        }
+        r.next = null;
+        ListNode reversed = reverseList(l);
+        prev.next = reversed;
+        ListNode temp = reversed;
+        while(temp.next != null){
+            temp = temp.next;
+        }
+        temp.next = next;
+        return head;
     }
 }
