@@ -4,7 +4,13 @@ import java.util.*;
 
 public class Session1 {
     public static void main(String[] args){
-        testNumMatchingSubseq();
+        testMaxWealth();
+    }
+
+    public static void testMaxWealth(){
+        int[][] accounts = new int[][]{{2, 8, 7}, {7, 1, 3}, {1, 9, 5}};
+        int max = maxWealth(accounts);
+        System.out.println(max);
     }
 
     public static void testNumMatchingSubseq(){
@@ -339,5 +345,60 @@ public class Session1 {
             this.word = word;
             this.index = index;
         }
+    }
+
+    /**
+     * given a mxn int grid where accounts[i][j] is
+     * the amount of money the ith customer has in the
+     * jth bank. Return the wealth that the richest customer has
+     *
+     * questions
+     * - can the value inside of bank be negative?
+     * - do all customers have j accounts?
+     * - will there be a minimum of 1 customer and 1 bank?
+     * - what's the max # of customers and banks?
+     * - what are the time and space constraints?
+     *
+     * examples
+     * - [2, 2, 2] = 6
+     *   [1, 2, 3] = 6
+     *   [1, 1, 5] = 7
+     *   => 7
+     * - [1, 1]
+     *   [2, 2]
+     *   [2, 2]
+     *   => 4
+     *
+     * methods
+     * - two pointers: may overcomplication problem
+     * - binary search: not application
+     * - sliding window: not application
+     * - sorting: can be helpful to eliminate customer
+     *
+     * plan
+     * declare a max value to return
+     * iterate over each customer
+     * initialize a totalValue
+     * for each bank [i][j] => add value to totalValue
+     * update max value if totalValue exceeds
+     * return max value
+     *
+     * For each customer array
+     * - sort array in descending order
+     * -
+     *
+     * time: O(m * n)
+     * space: O(1)
+     * */
+    public static int maxWealth(int[][] accounts){
+        int max = Integer.MIN_VALUE;
+        for(int[] customer : accounts){
+            int totalValue = 0;
+            for(int bank : customer){
+                totalValue += bank;
+            }
+            max = Math.max(max, totalValue);
+        }
+        return max;
     }
 }
