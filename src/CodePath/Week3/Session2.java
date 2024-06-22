@@ -2,7 +2,7 @@ package CodePath.Week3;
 
 public class Session2 {
     public static void main(String[] args){
-        testSqrt();
+        testSearchInRotatedArr();
     }
 
     public static void testSqrt(){
@@ -11,7 +11,7 @@ public class Session2 {
     }
 
     public static void testSearchInRotatedArr(){
-        int[] nums = new int[]{4, 5, 6, 7, 0, 1, 2};
+        int[] nums = new int[]{4};
         int res = searchInRotatedArr(nums, 4);
         System.out.println(res);
     }
