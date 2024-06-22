@@ -4,7 +4,25 @@ import java.util.*;
 
 public class Session1 {
     public static void main(String[] args){
-        testMaxWealth();
+        testMinRecolors();
+    }
+
+    public static void testMinRecolors(){
+        String blocks = "";
+        int recolors = minRecolors(blocks, 2);
+        System.out.println(recolors);
+    }
+
+    public static void testCountGoodSubstring(){
+        String s= "";
+        int res = countGoodSubstrings(s);
+        System.out.println(res);
+    }
+
+    public static void testSumOfMultiple(){
+        int n = 15;
+        int val = sumOfMultiple(n);
+        System.out.println(val);
     }
 
     public static void testMaxWealth(){
@@ -400,5 +418,217 @@ public class Session1 {
             max = Math.max(max, totalValue);
         }
         return max;
+    }
+
+    /**
+     * Given a positive int n find the sum of all int in ran 1-n inclusive
+     * that are divisible by 3, 5, 7
+     *
+     * return an int of the sum of all number in the given range that satisfy
+     * the constraint
+     *
+     * questions
+     * - what is the max of n
+     * - can n be < 3, 5, or 7?
+     * - if there are no divisible values => 0
+     * - are there time/space constraints?
+     *
+     * - all positive integers
+     *
+     * examples
+     * - n = 7 => 21
+     * - n = 10 -> 3, 5, 6, 7, 9 10 => 40
+     * - n = 1 => 0
+     *
+     * methods
+     * - two pointers: not useful and overcomplicates
+     * - hashmap: not a need to store calculated values
+     * - sorting: no list of elements to sort
+     * - iterating and finding the sum
+     *
+     * plan
+     * initialize a sum value
+     * iterate from 1 to n (inclusive)
+     * check if curr num is divisible by 3 || 5 || 7
+     * if it is then add num to sum
+     * return entire sum
+     *
+     * time: O(d*n) => divisors * n
+     * space: constant
+     * */
+    public static int sumOfMultiple(int n){
+        int sum = 0;
+        for(int i = 1; i <=n; i++){
+            if(i % 3 == 0 || i % 5 == 0 || i % 7 == 0){
+                sum += i;
+            }
+        }
+//        int[] divisors = new int[]{3, 5, 7};
+//        // 15
+//        for(int i = 0; i < divisors.length; i++){ // 0
+//            int val = divisors[i]; // 7
+//            while(val <= n){ // 7 < 7
+//                if(val % divisors[i] == 0){
+//                    sum += val; // 18
+//                }
+//                val += divisors[i]; // 10
+//            }
+//        }
+        return sum;
+    }
+
+    /**
+     * substring of size three with distinct characters
+     * good string: no repeating characters
+     * return the total coount of "good" substring in s
+     * substring: continuous string within string s
+     *
+     * questions
+     * - can string s have spaces/digit values?
+     * - Can string s be empty?
+     * - What is the max length of string s?
+     * - are there space/time constraints?
+     *
+     * examples
+     * - abccba => 2
+     * - aaaaaa => 0
+     * - aababcabc => 4 {abc, bca, cab, abc}
+     * - '' => 0
+     *
+     * methods
+     * - 2 pointers: sliding window
+     * - sorting: does not apply to this problem
+     * - hashmap: can be used to count char, but overcomplicates this problem
+     *
+     * plan
+     * initialize 2 ptr, l and r
+     * declare a counter to return
+     * while r ptr < length s
+     * check if elements at l, l + 1 and r are all unique
+     * => inc counter
+     * move l++ and r++
+     * return counter
+     *
+     *
+     * */
+
+    public static int countGoodSubstrings(String s){
+        int l = 0;
+        int r = 2;
+        int count = 0;
+        int S = s.length();
+        // abcabc => 4
+        while(r < S){ // 6
+            // abc
+            // validate if all elements are unique
+            if(s.charAt(l) != s.charAt(r)
+                    && s.charAt(l) != s.charAt(l + 1)
+                    && s.charAt(r) != s.charAt(l + 1)){
+                count++; // 4
+            }
+
+            l++;
+            r++;
+        }
+        return count;
+    }
+
+    /**
+     * Minimum recolors to get K consecutive black blocks given
+     * a string with either W or B characters, and a k value to
+     * rep the desired number of consecutive Bs. Count the num
+     * of recolors needed to get K consecutive Bs
+     *
+     * questions
+     * - K always <= the total string length?
+     * - can stirng contain spaces/digits/special chars?
+     * - time or space constraints?
+     * - can s be emtpty?
+     *
+     * examples
+     * - WWBB k = 3 => 1
+     * - WWWW k = 2 => 2
+     * - BBBB k = 3 => 0
+     * - "" => -1
+     *
+     * methods
+     * - two pointers: sliding window
+     * - sorting: not applicable to this problem
+     * - hashmap: for char counting will over complicate this problem
+     *
+     * plan
+     * initializing 2 pointers and a counter
+     * while r < s length
+     * - count number of W spaces between l and r ptrs
+     *  => update counter with max val of recolors
+     * increment l and r ptr by 1
+     * return counter with MIN recolors
+     * */
+    public static int minRecolors(String blocks, int k){
+        int B = blocks.length();
+        if(B == 0 || k > B){
+            return 0;
+        }
+        int l = 0;
+        int r = k - 1;
+        int res = Integer.MAX_VALUE;
+        while(r < B){ // 3 < 4
+
+            int ptr = l; // 2
+            int reColors = 0;
+            while(ptr <= r){ // 3
+                if(blocks.charAt(ptr++) == 'W'){
+                    reColors++; // 1
+                }
+            }
+            if(reColors == 0) return reColors;
+            res = Math.min(res, reColors); // 1
+            l++; // 3
+            r++; // 4
+        }
+        return res;
+    }
+
+    /**
+     * return true if a value of nums[i] == nums[j] AND (i - j) <= k
+     *
+     * questions
+     * - can k be 0?
+     * - can nums be empty?
+     * - time or space constraints?
+     *
+     * examples
+     * - 1 2 3 1 4 1 k = 4 => true
+     * - 1 2 3 4 k = 2 => false
+     * - [] => false
+     * - [1 2 3] k = 0 => false
+     *
+     * methods
+     * - iterate from 0 to n
+     * - Hashset is effective in checking for condition of matching
+     * - sorting: will mess up ordering
+     * - sliding window: can solve for conditions but time expensive
+     *
+     * plan
+     * initialize a hashset
+     * iterate over nums
+     * if curr elem is contained in set => return true
+     * if the set contains more than k elements => remove i - k element from set
+     * otherwise add element to set
+     * */
+    public static boolean containsDuplicateII(int[] nums, int k){
+        Set<Integer> set = new HashSet<>();
+        for(int i = 0; i < nums.length; i++){
+
+            if(set.contains(nums[i])) return true;
+            set.add(nums[i]);
+            if(set.size() > k){
+                set.remove(nums[i - k]);
+            }
+        }
+        return false;
+    }
+    public static int containsDuplicatesII(int[] nums, int k){
+
     }
 }
