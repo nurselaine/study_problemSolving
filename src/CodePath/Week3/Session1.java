@@ -628,7 +628,4 @@ public class Session1 {
         }
         return false;
     }
-    public static int containsDuplicatesII(int[] nums, int k){
-
-    }
 }
