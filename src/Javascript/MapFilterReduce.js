@@ -40,7 +40,9 @@ const obj3 = {'C++': 50, ASM:10, Haskell: 20};
 * */
 const getPassedClasses = (obj) => {
     let allClasses = Object.keys(obj);
-    return allClasses.filter((classname) => obj[classname] >= 60);
+    let passClasses = allClasses.filter((classname) => obj[classname] >= 60);
+    let sortedPassedClasses = passClasses.sort((a, b) => obj[b] - obj[a]);
+    return sortedPassedClasses;
 }
 // console.log(getPassedClasses(obj1));
 // console.log(getPassedClasses(obj2));
@@ -87,6 +89,63 @@ const countVowels = (str) => {
     }, 0)
 }
 
-console.log(countVowels("aislfe dial"));
-console.log(countVowels("    "));
-console.log(countVowels("abcdefg aaay"));
+// console.log(countVowels("aislfe dial"));
+// console.log(countVowels("    "));
+// console.log(countVowels("abcdefg aaay"));
+
+/*
+*John has invited some friends. His list is:
+
+s = "Fred:Corwill;Wilfred:Corwill;Barney:Tornbull;Betty:Tornbull;Bjon:Tornbull;Raphael:Corwill;Alfred:Corwill";
+Could you make a program that makes this string uppercase gives it sorted in alphabetical order by last name.
+When the last names are the same, sort them by first name. Last name and first name of a guest come in the result between parentheses separated by a comma.
+So the result of function meeting(s) will be:
+
+"(CORWILL, ALFRED)(CORWILL, FRED)(CORWILL, RAPHAEL)(CORWILL, WILFRED)(TORNBULL, BARNEY)(TORNBULL, BETTY)(TORNBULL, BJON)"
+It can happen that in two distinct families with the same family name two people have the same first name too.
+*
+* given a string of names, transform the string to all uppercase letters
+* then sort the string by last names and tie-breakers with first names
+* the return value should be a string with () surrounding each name with a comma between the names
+*
+* questions
+* - how many names max can there be?
+* - can names have punctuation or spaces
+* - will there be empty strings for names?
+*
+* - the resulting string should wrap each name around () and separate the last and first name with a comma
+* examples
+* - "ela:huy;bao:din;min:din" => "(din, bao)(dinh, min)(huy, ela)"
+* - "lam:mo;lim:ron;kim:ra" => "(lam, mo)(lim, rom)(kim, ra)"
+* */
+
+s = "Fred:Corwill;Wilfred:Corwill;Barney:Tornbull;Betty:Tornbull;Bjon:Tornbull;Raphael:Corwill;Alfred:Corwill";
+
+const guessList = (s) => {
+    s = s.toUpperCase();
+    let names = s.split(";");
+    let sortedNames = names.sort((a, b) => {
+        let aName = a.split(":");
+        let bName = b.split(":");
+        if(aName[1] < bName[1]){
+            return -1;
+        } else if (aName[1] > bName[1]){
+            return 1;
+        } else if (aName[0] < bName[0]){
+            return -1;
+        } else if (aName[0] > bName[0]){
+            return 1;
+        }
+        return 0;
+    })
+    let formattedList = sortedNames.map((name) => {
+        let fullName = name.split(":");
+        return `(${fullName[1]},${fullName[0]})`;
+    })
+    return formattedList.join('');
+}
+let result = guessList(s);
+console.log(result)
+
+
+
