@@ -8,7 +8,19 @@ import java.util.PriorityQueue;
 public class Session1 {
 
     public static void main(String[] args){
-        testLastStoneWeight();
+        testMeetingRoomsII();
+    }
+
+    public static void testMeetingRoomsII(){
+        int[][] intervals = new int[][]{{3, 4}, {4, 8}, {5, 8}, {2, 6}};
+        int rooms = minMeetingRooms(intervals);
+        System.out.println(rooms);
+        intervals = new int[][]{{3, 4}, {4, 8}};
+        rooms = minMeetingRooms(intervals);
+        System.out.println(rooms);
+        intervals = new int[][]{{1, 2}};
+        rooms = minMeetingRooms(intervals);
+        System.out.println(rooms);
     }
 
     public static void testLastStoneWeight(){
@@ -128,5 +140,98 @@ public class Session1 {
             maxHeap.offer(resultStone); // 0
         }
         return maxHeap.poll();
+    }
+
+    /**
+     * Meeting Rooms II
+     * Given an array of meeting time intervals where intervals[i] = [start, end]
+     * return the minimum number of conference rooms required
+     *
+     * questions
+     * - What is the min and max number of meeting intervals?
+     * - Are the times integer or decimal values?
+     * - An additional meeting room is required when the end time of a
+     * meeting is greater than or equal to the start time of another meeting?
+     * - What are the time or space constraints?
+     * - Would a end time == start time require a new meeting room? No
+     * - Is the meeting intervals sorted?
+     *
+     * examples
+     * - [[6, 7], [13, 15], [9,11], [10, 14]] => 3
+     * - [[1, 3]] => 1
+     * - [[6, 11], [10,11], [9,11]] => 3
+     * - [] => 0
+     *
+     * methods
+     * - sorting in ascending order by the start times then using 2 pointers to check preceding meeting
+     * - priority queue: tracking the meetings by start times
+     *  - create heap O(N)
+     *  - remove from heap: O(logN)
+     * - multiple looping: to search for the next closest meeting time
+     * - binary search: not applicable
+     * - sliding window: would over complicate problem
+     * - hashtable: would over complicate problem
+     *
+     * plan
+     * initialize a roomCounter and a minHeap ordered by meeting start times
+     * add all meeting intervals to heap
+     * while heap size is at least 2
+     * - remove the top of the heap
+     * check if:
+     * 1. removed end time is >= current top of heap start time
+     *  => increment roomCounter
+     * return the roomCounter for the total rooms needed
+     *
+     * sort the intervals by the start time
+     * initialize a minHeap and add the first meetings end time to the heap
+     * - the heap will track all the ending times
+     * each iteration of the intervals, check whether the top of the heap is
+     * less than the current interval's start time => this means the room is free
+     * to use and the top element can be removed from the heap
+     * the heap tells us the minimum number of rooms needed
+     *
+     * review
+     * keep a room counter and initialize a meeting end time heap
+     * then iterate over all the meeting times. If the heap is empty (first meeting)
+     * then add the end time to the minHeap.
+     * otherwise, check if the current start time is < the earlier end time (top of heap)
+     * if it is then add the current end time to the heap
+     * else remove the top of the heap and add the current end time of the heap
+     *
+     * time: O(NlogN) + O(N) * O(2logN) => O(NLogN)
+     * space: O(N)
+     * */
+    public static int minMeetingRooms(int[][] intervals){
+        int roomCounter = 0;
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        for(int[] interval : intervals){
+            if(minHeap.isEmpty() || interval[0] < minHeap.peek()){
+                minHeap.offer(interval[1]);
+            } else {
+                minHeap.poll();
+                minHeap.offer(interval[1]);
+            }
+            roomCounter = Math.max(roomCounter, minHeap.size());
+        }
+
+        return roomCounter;
+//        if (intervals.length == 0) return 0;
+//        int roomCounter = 1;
+//        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+//        // [[6, 7], [13, 15], [9,11], [10, 14]] => 3
+//        for(int[] interval : intervals){
+//            minHeap.offer(interval);
+//        }
+//        // {[6, 7], [9, 11] [10,14] [13, 15]}
+//
+//        while(minHeap.size() >= 2){
+//            int[] currentMeeting = minHeap.poll(); // [10, 14]
+//            if(currentMeeting[1] > minHeap.peek()[0]){ // 13
+//                roomCounter++; // 2
+//            }
+//        }
+//        return roomCounter; // 2
     }
 }
