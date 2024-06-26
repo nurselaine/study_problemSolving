@@ -8,7 +8,25 @@ import java.util.PriorityQueue;
 public class Session1 {
 
     public static void main(String[] args){
-        testMeetingRoomsII();
+        testRob();
+    }
+
+    public static void testRob(){
+        int[] nums = new int[]{1, 2, 3, 1};
+        int val = rob(nums);
+        System.out.println(val);
+    }
+
+    public static void testPalindromePermutation(){
+        String s = "aabcaacb";
+        boolean res = canPermutePalindrome(s);
+        System.out.println(res);
+        s = "a";
+        res = canPermutePalindrome(s);
+        System.out.println(res);
+        s = "acba";
+        res = canPermutePalindrome(s);
+        System.out.println(res);
     }
 
     public static void testMeetingRoomsII(){
@@ -233,5 +251,131 @@ public class Session1 {
 //            }
 //        }
 //        return roomCounter; // 2
+    }
+
+    /**
+     * Palindrome Permutations
+     * given a string return true if a permutation of the string can form a
+     * palindrome and false otherwise
+     *
+     * - string consist of lowercase letters without spaces
+     * - palindrome consist of even count letter OR even count letters and one odd count letter
+     * - palindrome can consist of one letter
+     *
+     * questions
+     * - can the string be empty?
+     *  - what should be returned if string is empty?
+     * - what is the max length of the string?
+     * - time/space constraints?
+     *
+     * examples
+     * - "abccb" => true
+     * - "acba" => false
+     * - "acddac" => true
+     * - "a" => true
+     *
+     * methods
+     * - sorting in lexographic order and using sliding window and odd num flag to check string validity
+     * - Hashmap for counting characters + checking map for even and at up to one odd letter count
+     *  - O(1) to access character & O(N) space
+     * - Alphabet array of 26 - add each char count to arr and iterate over values to check # of odd num counts
+     *  - O(N) to initialize and O(1)
+     * - multiple passes over string and checking char count with odd number flag
+     *
+     * plan
+     * initialize a map
+     * add each char count to map
+     * iterate over map value set and declare a oddNumFlag
+     * increment odd num flag each time an odd number is encountered
+     * return whether flag is > 1
+     *
+     * review
+     * - initialize a map and count each char into map
+     * - iterate over each map value
+     * - increment odd number counter for each odd num
+     * encountered
+     * - return whether odd number is > 1
+     *
+     * time: O(N) + O(N) => O(N)
+     * time: O(N) + O(26) => O(N)
+     * space: O(1)
+     * space: O(1)
+     * */
+    public static boolean canPermutePalindrome(String s){
+        int[] charArr = new int[26];
+        for(char c : s.toCharArray()){
+            charArr[c - 'a']++;
+        }
+        int oddNumCounter = 0;
+        for(int ch : charArr){
+            if(ch % 2 != 0){
+                oddNumCounter++;
+            }
+            if(oddNumCounter > 1) return false;
+        }
+        return true;
+//        Map<Character, Integer> charCount = new HashMap<>();
+//
+//        for(char c : s.toCharArray()){
+//            charCount.put(c, charCount.getOrDefault(c, 0) + 1);
+//        }
+//        int oddNumCounter = 0;
+//        for(int count : charCount.values()){
+//            if(count % 2 != 0){
+//                oddNumCounter++;
+//            }
+//        }
+//        return oddNumCounter <= 1;
+    }
+
+    /**
+     * Given a list of values representing money in each house[i] of a neighborhood
+     * find the max about of money a robber can take. If the robber steals from
+     * two adjacent houses i + [i + 1] then they will be stopped
+     * - find the max amount of money without getting stopped
+     *
+     * questions
+     * - can any of the values be negative?
+     * - What is the min and max number of houses in the list?
+     * - Are there time or space constraints?
+     *
+     * examples
+     * - [3 2 5 1 2] => 10
+     * - [3 4] => 4
+     * - [1] => 1
+     *
+     * methods
+     * - recursively calculate all possibilities and use a memo table to track prev calculated totals
+     * - 2 pointers and multiple passes: not time effective
+     *
+     * plan
+     * - getRoute => helper function
+     * declare a hashmap to store calculated totals
+     * check if current index is greater than nums size
+     *  => return the current total
+     * check if the current index is in the memo table
+     *  => return the value
+     * calculate the value of the current value at index + recursively calling index + 2 AND compare
+     * with the value of recursive call to index + 1
+     * add the current index with the max between the two above values to the map
+     * */
+    public static int rob(int[] nums){
+        Map<Integer, Integer> memo = new HashMap<>();
+        return getRoute(nums, memo, 0);
+    }
+
+    private static int getRoute(int[] nums, Map<Integer, Integer> memo, int i){
+        if(i >= nums.length){
+            return 0;
+        }
+
+        if(memo.containsKey(i)){
+            return memo.get(i);
+        }
+
+        int runningTotal = Math.max(getRoute(nums, memo, i + 1), (nums[i] + getRoute(nums, memo, i + 2)));
+
+        memo.put(i, runningTotal);
+        return runningTotal;
     }
 }
