@@ -8,7 +8,26 @@ import java.util.PriorityQueue;
 public class Session1 {
 
     public static void main(String[] args){
-        testRob();
+        testClimb();
+    }
+
+    public static void testClimb(){
+        int n = 4;
+        int c = climbingStairs(n);
+        System.out.println(c);
+    }
+
+    public static void testRobII(){
+        int[] nums = new int[]{1, 2, 3};
+        int val = robII(nums);
+        System.out.println(val);
+    }
+
+    public static void testLongestCommonSubsequence(){
+        String text1 = "";
+        String text2 = "aaaaaa";
+        int result = longestCommonSubsequence(text1, text2);
+        System.out.println(result);
     }
 
     public static void testRob(){
@@ -377,5 +396,161 @@ public class Session1 {
 
         memo.put(i, runningTotal);
         return runningTotal;
+    }
+
+    /**
+     * Given 2 strings, determine if either are a subsequence of the other
+     * subsequence: when characters of a string appear in the same order as the other string
+     * => ace akcnel are subsequence
+     *
+     * questions
+     * - Can either string have spaces or special characters?
+     * - Does upper or lower case matter?
+     * - How long can either string be?
+     * - Can either string be emtpy?
+     * - TIme/Space constraints?
+     *
+     * examples
+     * - s = ace t = akcjel => 3
+     * - s = aa t = bbbabbb => 1
+     * - s = che t = lkj => 0
+     * - s = "" t = jdi => 0
+     *
+     * methods
+     * - multiple passes: check for every letter and every possible combination
+     *  => very time expensive
+     * - Sorting/binary search: not applicable
+     * - 2 pointers: possibly can use to track indicies of each string
+     * - Hashmap: possibly can use to track length of subsequences and matching characters
+     * - recursively checking for matching values
+     *
+     * plan
+     * checkMatch => helper fn to count num of matching letters in order
+     * - initialize a map to hold index, subsequence length
+     * initialize 2 pointers to track index of text1 and text2
+     * base cases
+     * 1. check if either ptr is > length of its corresponding string
+     * => 0
+     * 2. check if map contains current index
+     * => return value of map at index
+     * 3. check if values at each ptr are equal
+     * => 1 + checkMatch(ptr1 + 1, ptr2 + 1)
+     * max between checkMatch(ptr1 + 1, ptr2) , checkMatch(ptr1, ptr2 + 1)
+     * put current index , max value into map
+     * return map at the current index
+     *
+     * evaluate
+     * runtime: O(N) if N = len text1 + len text2
+     * memory: O(N) + O(N) => O(N)
+     * */
+    public static int longestCommonSubsequence(String text1, String text2){
+        int[][] memo = new int[text1.length()][text2.length()];
+        return checkMatch(text1, text2, 0, 0, memo);
+    }
+
+    //  s = ace t = akcjel => 3
+    private static int checkMatch(String text1, String text2, int t1, int t2, int[][] memo){
+        if (t1 >= text1.length() || t2 >= text2.length()){ // 3 5
+            return 0;
+        }
+        if(memo[t1][t2] > 0){
+            return memo[t1][t2];
+        }
+        if(text1.charAt(t1) == text2.charAt(t2)){ // e e
+            return 1 + checkMatch(text1, text2, t1 + 1, t2 + 1, memo); // 1 + 1 + 1 + 0
+        }
+        memo[t1][t2] = Math.max(checkMatch(text1, text2, t1 + 1, t2, memo), checkMatch(text1, text2,t1, t2 + 1, memo));
+        return memo[t1][t2];
+    }
+
+    /**
+     * given a list of houses and their values
+     * find the max value that can be robbed from each house
+     * - robber cannot rob 2 adjacent houses
+     * => nums[i] + nums[i + 1} not ok
+     * - first house + last house are considered adjacent
+     * => nums[0] + nums[N - 1]
+     *
+     * questions
+     * - can the list be empty?
+     * - what's the max size of the list?
+     * - what's the min size?
+     * - can the values ever be negative?
+     * - time/space constraints?
+     *
+     * examples
+     * - [3 4 1 9] => 13
+     * - [1] => 1
+     * - [1 2 3] => 3
+     *
+     * methods
+     * - recursion + memoization to check the amount starting at index 0 going from house i + 2
+     * and repeat the following action for each index - more of an exhaustive search where I want
+     * to find the best possible outcome for the robber
+     * - loop through many times - not as time effective
+     *
+     * plan
+     * declare a hashmap to store the generated totalMax values at index
+     * return max values of findRoute starting for subarrays index 0 to N - 1 AND 1 to N
+     *
+     * findRoute => helper function
+     * create pointer for current index
+     * check if index is < length of list
+     *  => return 0
+     * check if map contains index
+     * Find the max between:
+     * 1. find the value starting at current index nums[i] + the total values of alternating houses => findRoute(i + 2)
+     * 2. find the total value starting at nums[i + 1] by recursively checking findRoute(i + 1)
+     * put index, max into map
+     * return map[index]
+     * */
+    public static int robII(int[] nums){
+        HashMap<Integer, Integer> map1 = new HashMap<>();
+        HashMap<Integer, Integer> map2 = new HashMap<>();
+        return Math.max(findRoute(nums, 0, nums.length - 1, map1), findRoute(nums, 1, nums.length, map2));
+    }
+
+    // 0 1 2 3
+    // 12 13 9 0
+    // 13 9 2 9
+    private static int findRoute(int[] nums, int index, int N, HashMap<Integer, Integer> map){
+        // [3 4 1 9] => 13 N = 3
+        if(index >= N){ // 3
+            return 0;
+        }
+        if(map.containsKey(index)){
+            return map.get(index);
+        }
+        int maxTotal = Math.max(findRoute(nums, index + 1, N, map),
+                nums[index] + findRoute(nums, index + 2, N, map));
+        map.put(index, maxTotal);
+        return map.get(index);
+    }
+
+    public static int climbingStairs(int n){
+        int[] memo = new int[n + 1];
+        Arrays.fill(memo, -1);
+        return climb(n, 0, memo);
+    }
+
+    // 0 1 2 3 4 5
+    // 2 1 1 1 0 0
+    // 1 1 0 0 0  0
+    // 3 2 1 1
+    private static int climb(int n, int i, int[] memo){
+        // [0 1 2 3 4]
+        if(i > n){ //
+            return 0;
+        }
+        if(i == n){
+            return 1;
+        }
+        if(memo[i] != -1){
+            return memo[i];
+        }
+
+        int steps = climb(n, i + 1, memo)+ climb(n, i + 2, memo);
+        memo[i] = steps;
+        return memo[i];
     }
 }
